@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const Dotenv =  require('dotenv-webpack');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
     entry: './src/index.js', //PUNTO DE ENTRADA DE NUESTRA APLICACIÓN
@@ -12,6 +13,7 @@ module.exports = {
         assetModuleFilename: "assets/images/[hash][ext]",//PARAMETRIZAR LA CARPETA DE SALIDA DE LOS ASSETS
     },
     mode: 'development',
+    devtool: "source-map",
     watch: true,
     resolve: {
         extensions: ['.js'],//EXTENSIONES QUE RESUELVE Y TRATA WEBPACK EN ESTE PROYECTO
@@ -89,5 +91,17 @@ module.exports = {
             ]
         }),
         new Dotenv(),
+        new BundleAnalyzerPlugin()
     ],
+    devServer:{
+        static: {
+            directory : path.join(__dirname,'public'), //CONFIGURA EL DIRECTORIO DONDE SE ENCUENTRAN LOS ARCHIVOS ESTATICOS O PUBLICOS,
+            watch: true, //RECARGA AUTOMATICAMENTE LA PAGINA AL CAMBIAR ARCHIVOS EN EL DIRECTORIO
+        },  
+        open: true, //ABRE UNA VENTANA DEL NAVEGADOR AL CORRER
+        compress: true, //HABILITA QUE SE COMPRIMA A GZIP
+        historyApiFallback: true, //ES UN HANDLER DE ERRORES 
+        port: 4000, //DEFINE EL PUERTO POR DEFAULT
+        watchFiles: path.join(__dirname, "./**"), //OBSERVA LOS CAMBIOS EN LOS ARCHIVOS DEFINIDOS EN ESTE CASO EN TODOS
+    }
 }
